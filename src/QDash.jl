@@ -1,5 +1,7 @@
 module QDash
 
-# Write your package code here.
+export GenericParameter
+
+include("parameter/parameter.jl")
 
 end
