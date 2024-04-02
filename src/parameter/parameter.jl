@@ -7,9 +7,9 @@ abstract type Parameter <: Qobject end
 A generic parameter with a name, label, and unit.
 """
 @kwdef mutable struct GenericParameter <: Parameter
-    name::String
-    label::String
-    unit::Unitful.Units
+    name::String = ""
+    label::String = ""
+    unit::Unitful.Units = Unitful.NoUnits
     metadata::Dict{String, Any} = Dict{String, Any}()
     GenericParameter(name, label, unit) = new(name, label, unit, Dict("Name"=>name, "Unit"=>unit))
 end
