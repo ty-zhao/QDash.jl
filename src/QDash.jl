@@ -1,6 +1,6 @@
 module QDash
 
-export GenericParameter, Qobject
+export Parameter, Qobject
 
 include("qobject/qobject.jl")
 include("parameter/parameter.jl")

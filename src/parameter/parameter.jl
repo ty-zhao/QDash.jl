@@ -1,17 +1,15 @@
-using Unitful
-
-abstract type Parameter <: Qobject end
-
 """
-    GenericParameter(name::String, label::String, unit::Unitful.Units)
-A generic parameter with a name, label, and unit.
+    Parameter{T}(name::String, label::String, value::T)
+A parameter.
 """
-@kwdef mutable struct GenericParameter <: Parameter
-    name::String = ""
+@kwdef mutable struct Parameter{T} <: AbstractParameter{T}
+    name::String
     label::String = ""
-    unit::Unitful.Units = Unitful.NoUnits
-    metadata::Dict{String, Any} = Dict{String, Any}()
-    GenericParameter(name, label, unit) = new(name, label, unit, Dict("Name"=>name, "Unit"=>unit))
+    value::Union{T, Nothing} = nothing
+    metadata::Dict{String, <:Any} = Dict{String, <:Any}()
+    function Parameter(name, label, value::T) where {T}
+        new{T}(name, label, value, Dict("Name"=>name, "Label"=>label, "Value"=>value))
+    end
 end
 
-# GenericParameter() = GenericParameter("", "", NoUnits)
+parameter_type(::Type{<:Parameter{T}}) where {T} = T
