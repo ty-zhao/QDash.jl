@@ -12,4 +12,4 @@ A parameter.
     end
 end
 
-parameter_type(::Type{<:Parameter{T}}) where {T} = T
+parameter_type(::Parameter{T}) where {T} = T
