@@ -4,5 +4,5 @@
 
 ```@docs
 Qobject
-GenericParameter
+Parameter
 ```
