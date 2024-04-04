@@ -12,4 +12,12 @@ A parameter.
     end
 end
 
-parameter_type(::Parameter{T}) where {T} = T
+valuetype(::Parameter{T}) where {T} = T
+
+function Base.push!(p::Parameter{<:AbstractVector}, items...)
+    Base.push!(p.value, items...)
+end
+
+function Base.append!(p::Parameter{<:AbstractVector}, collections...)
+    Base.append!(p.value, collections...)
+end

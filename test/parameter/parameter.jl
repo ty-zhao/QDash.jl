@@ -10,11 +10,11 @@ using Test
                                 "Description"=>"Voltage of the system")
 
     para2 = Parameter("voltage", "Voltage", [0.0, 1.0, 2.0])
-    @test QDash.parameter_type(para2) == Vector{Float64}
+    @test valuetype(para2) == Vector{Float64}
 
     para3 = Parameter("voltage", "Voltage", [0, 1, 2])
-    @test QDash.parameter_type(para3) == Vector{Int64}
-
-    para4 = Parameter("voltage", "Voltage", nothing)
-    para4.value = 1.0
+    push!(para3, 3, 4)
+    @test para3.value == [0, 1, 2, 3, 4]
+    append!(para3, [5, 6], [7, 8])
+    @test para3.value == [0, 1, 2, 3, 4, 5, 6, 7, 8]
 end
