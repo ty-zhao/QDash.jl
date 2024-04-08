@@ -1,5 +1,3 @@
-using Lazy: @forward
-
 """
     Parameter{T}(name::String, label::String, value::T)
 A parameter.
@@ -16,8 +14,5 @@ end
 
 valuetype(::Parameter{T}) where {T} = T
 
-@forward Parameter{<:AbstractArray}.value Base.getindex
-@forward Parameter{<:AbstractArray}.value Base.iterate
-@forward Parameter{<:AbstractArray}.value Base.length
-@forward Parameter{<:AbstractVector}.value Base.append!
-@forward Parameter{<:AbstractVector}.value Base.push!
+@forward Parameter{<:AbstractArray}.value Base.getindex, Base.iterate, Base.length
+@forward Parameter{<:AbstractVector}.value Base.append!, Base.push!
