@@ -1,6 +1,3 @@
-using QDash
-using Test
-
 @testset "parameter instance" begin
     para1 = Parameter("voltage", "Voltage", 0.0)
     @test para1.metadata == Dict("Name"=>"voltage", "Label"=>"Voltage", "Value"=>0)

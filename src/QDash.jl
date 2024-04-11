@@ -4,7 +4,7 @@ using Lazy: @forward
 
 export Parameter, Qobject, valuetype
 
-include("qobject/qobject.jl")
-include("parameter/parameter.jl")
+include("qobject.jl")
+include("parameter.jl")
 
 end
