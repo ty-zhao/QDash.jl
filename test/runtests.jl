@@ -6,5 +6,5 @@ using Test
 end
 
 @testset "test parameter" begin
-    include("parameter/parameter.jl")
+    include("parameter.jl")
 end
