@@ -4,6 +4,7 @@ authors = ["Tongyu Zhao"]
 version = "0.1.0-DEV"
 
 [deps]
+DimensionalData = "0703355e-b756-11e9-17c0-8b28908087d0"
 GenieFramework = "a59fdf5c-6bf0-4f5d-949c-a137c9e2f353"
 Lazy = "50d2b5c4-7a5e-59d5-8109-a42b560f39c0"
 Revise = "295af30f-e4ad-537b-8983-00126c2a3abe"
@@ -11,6 +12,7 @@ Unitful = "1986cc42-f94f-5a68-af5c-568840ba703d"
 YAXArrays = "c21b50f5-aa40-41ea-b809-c0f5e47bfa5c"
 
 [compat]
+DimensionalData = "0.26"
 GenieFramework = "2"
 Lazy = "0.15"
 Revise = "3"
