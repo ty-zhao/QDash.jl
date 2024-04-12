@@ -6,14 +6,14 @@ A parameter.
     name::String
     label::String
     value::T
-    metadata::Dict{String, <:Any} = Dict{String, Any}()
+    unit::Unitful.Units
+    metadata::Dict{String, <:Any} = Dict{String, Any}("Name"=>name, "Label"=>label, "Value"=>value, "Unit"=>unit)
     # function Parameter(name, label, value::T) where {T}
     #     new{T}(name, label, value, Dict("Name"=>name, "Label"=>label, "Value"=>value))
     # end
 end
 
-Parameter(name, label, value::T) where {T} = Parameter{T}(name, label, value, Dict("Name"=>name, "Label"=>label, "Value"=>value))
-# Parameter(;name, label, value::T) where {T} = Parameter{T}(name, label, value, Dict("Name"=>name, "Label"=>label, "Value"=>value))
+Parameter(name, label, value::T, unit) where {T} = Parameter{T}(name=name, label=label, value=value, unit=unit)
 
 valuetype(::Parameter{T}) where {T} = T
 

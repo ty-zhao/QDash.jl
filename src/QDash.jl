@@ -1,6 +1,7 @@
 module QDash
 
 using Lazy: @forward
+using Unitful
 
 export Parameter, Qobject, valuetype
 
