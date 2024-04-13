@@ -1,5 +1,5 @@
 """
-    Parameter{T}(name::String, label::String, value::T)
+    Parameter{T}(name::String, label::String, value::T, unit::Unitful.Units)
 A parameter.
 """
 @kwdef mutable struct Parameter{T} <: AbstractParameter{T}
