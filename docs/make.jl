@@ -62,3 +62,5 @@ makedocs(
     warnonly = ("strict=false" in ARGS),
     doctest = ("doctest=only" in ARGS) ? :only : true,
 )
+
+deploydocs(; repo="github.com/ty-zhao/QDash.jl.git")
