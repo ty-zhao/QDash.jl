@@ -2,18 +2,23 @@
     Parameter{T}(name::String, label::String, value::T, unit::Unitful.Units)
 A parameter.
 """
-@kwdef mutable struct Parameter{T} <: AbstractParameter{T}
-    name::String
-    label::String
-    value::T
-    unit::Unitful.Units
-    metadata::Dict{String, <:Any} = Dict{String, Any}("Name"=>name, "Label"=>label, "Value"=>value, "Unit"=>unit)
-    # function Parameter(name, label, value::T) where {T}
-    #     new{T}(name, label, value, Dict("Name"=>name, "Label"=>label, "Value"=>value))
-    # end
+mutable struct Parameter{T} <: AbstractParameter{T}
+    name     :: String
+    label    :: String
+    value    :: T
+    unit     :: Unitful.Units
+    metadata :: Dict{String, <:Any}
 end
 
-Parameter(name, label, value::T, unit) where {T} = Parameter{T}(name=name, label=label, value=value, unit=unit)
+function Parameter(;
+    name  :: String = "parameter",
+    label :: String = "label",
+    value :: T      = T[],
+    unit  :: Unitful.Units = Unitful.NoUnits) where {T}
+
+    metadata = Dict("name"=>name, "label"=>label, "value"=>value, "unit"=>unit)
+    Parameter{T}(name, label, value, unit, metadata)
+end
 
 valuetype(::Parameter{T}) where {T} = T
 
