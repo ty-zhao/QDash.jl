@@ -20,6 +20,11 @@ function Parameter(;
     Parameter{T}(name, label, value, unit, metadata)
 end
 
+function Base.setproperty!(p::Parameter, s::Symbol, v)
+    p.metadata[string(s)] = v
+    setfield!(p, s, convert(fieldtype(typeof(p), s), v))
+end
+
 valuetype(::Parameter{T}) where {T} = T
 
 @forward Parameter{<:AbstractArray}.value Base.getindex, Base.iterate, Base.length
