@@ -7,22 +7,28 @@ mutable struct Parameter{T} <: AbstractParameter{T}
     label    :: String
     value    :: T
     unit     :: Unitful.Units
+    ts       :: String
     metadata :: Dict{String, <:Any}
 end
 
 function Parameter(;
     name  :: String = "parameter",
     label :: String = "label",
-    value :: T      = T[],
-    unit  :: Unitful.Units = Unitful.NoUnits) where {T}
-
-    metadata = Dict("name"=>name, "label"=>label, "value"=>value, "unit"=>unit)
-    Parameter{T}(name, label, value, unit, metadata)
+    value :: T = T[],
+    unit  :: Unitful.Units = Unitful.NoUnits
+) where {T}
+    timestamp = string(now())
+    metadata = Dict("name"=>name, "label"=>label, "value"=>value, "unit"=>unit, "ts"=>timestamp)
+    return Parameter{T}(name, label, value, unit, timestamp, metadata)
 end
 
 function Base.setproperty!(p::Parameter, s::Symbol, v)
     p.metadata[string(s)] = v
+    ts = string(now())
+    p.metadata["ts"] = ts
     setfield!(p, s, convert(fieldtype(typeof(p), s), v))
+    setfield!(p, :ts, ts)
+    return nothing
 end
 
 valuetype(::Parameter{T}) where {T} = T
