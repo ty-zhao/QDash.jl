@@ -15,5 +15,10 @@ varlist = Tuple(
     for (i, gettable) in enumerate(gettable_pars)
 )
 
-return Dataset(;properties=Dict("name"=>"dataset"), NamedTuple{varnames}(varlist)...)
+return Dataset(;properties=Dict("tuid"=>gen_tuid()), NamedTuple{varnames}(varlist)...)
+end
+
+function gen_tuid(;time::TimeType=now())
+    timestring = string(Dates.format(time, "yyyymmdd-HHMMSS-sss"))
+    return string(timestring, "-", string(uuid4())[1:6])
 end
