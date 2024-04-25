@@ -36,10 +36,11 @@ valuetype(::Parameter{T}) where {T} = T
 @forward Parameter{<:AbstractArray}.value Base.getindex, Base.iterate, Base.length
 @forward Parameter{<:AbstractVector}.value Base.append!, Base.push!
 
-function Base.show(io::IO, mime::MIME"text/plain", p::Parameter)
-    println(io, "Parameter:")
-    println(io, "  name : ", p.name)
-    println(io, "  label: ", p.label)
-    println(io, "  value: ", p.value)
-    println(io, "  unit : ", p.unit)
+function Base.show(io::IO, ::MIME"text/plain", p::Parameter)
+    println(io, "Parameter")
+    fields = [:name, :label, :value, :unit]
+    lmax =  maximum([length(string(f)) for f in fields])
+    for f in fields
+        println(io, "  ", f, " "^(lmax-length(string(f))), ": ", getfield(p, f))
+    end
 end
