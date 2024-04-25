@@ -4,5 +4,5 @@ load_metadata!(q::Qobject, metadata::Dict{String, <:Any}) = merge!(q.metadata, m
 
 snapshot(q::Qobject) = deepcopy(q.metadata)
 
-abstract type AbstractParameter{T} <: Qobject end
+abstract type AbstractParameter <: Qobject end
 abstract type AbstractInstrument <: Qobject end

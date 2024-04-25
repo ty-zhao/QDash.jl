@@ -30,6 +30,6 @@
         [gettable1, gettable2],
     )
 
-    @test size(ds[:x1]) == (100,)
-    @test size(ds[:y1]) == (100, 200)
+    @test size(ds.x1) == (100,)
+    @test size(ds.y1) == (100, 200)
 end
