@@ -16,7 +16,7 @@ YAXArrays = "c21b50f5-aa40-41ea-b809-c0f5e47bfa5c"
 
 [compat]
 Dates = "<0.0.1, 1"
-DimensionalData = "0.26"
+DimensionalData = "0.26, 0.27"
 DocumenterTools = "0.1"
 GenieFramework = "2"
 Lazy = "0.15"
