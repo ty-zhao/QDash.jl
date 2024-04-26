@@ -2,10 +2,7 @@ using QDash
 using Test
 using Unitful
 
-@testset "test parameter" begin
+@testset verbose=true "QDash" begin
     include("parameter.jl")
-end
-
-@testset "test dataset" begin
     include("dataset.jl")
 end

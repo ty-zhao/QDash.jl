@@ -1,4 +1,4 @@
-@testset "dataset" begin
+@testset "dataset test" begin
     settable1 = Parameter(;
         name  = "voltage",
         label = "Voltage",
