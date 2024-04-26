@@ -1,10 +1,17 @@
-@testset "parameter instance" begin
+@testset "parameter test" begin
     para1 = Parameter(;
         name  = "voltage",
         label = "Voltage",
         value = 0.0,
         unit  = u"V",
     )
+    @test repr("text/plain", para1) == """
+                                    Parameter
+                                      name : voltage
+                                      label: Voltage
+                                      value: 0.0
+                                      unit : V
+                                    """
     @test para1.metadata == Dict(
         "name"  => "voltage",
         "label" => "Voltage",
@@ -15,7 +22,7 @@
     para1.value = 5.0
     @test para1.metadata["value"] == 5.0
 
-    QDash.load_metadata!(para1, Dict("description" => "Voltage of the system"))
+    QDash.load_metadata!(para1, Dict("description"=>"Voltage of the system"))
     @test QDash.snapshot(para1) == Dict(
         "name"  => "voltage",
         "label" => "Voltage",
