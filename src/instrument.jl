@@ -46,52 +46,64 @@ end
 
 function Base.show(io::IO, ::MIME"text/plain", d::Dict{Symbol, Parameter})
     printstyled(io, "Parameters"; bold=true)
-    println()
+    println(io)
+
+    if length(d) == 0
+        column_widths = (6, 4, 5, 5, 4)
+        print_horizontal_line(io, column_widths, ('╭', '─', '┬', '╮'))
+        printstyled(io, "│Symbol │Name │Label │Value │Unit │"; bold=true)
+        println(io)
+        print_horizontal_line(io, column_widths, ('├', '─', '┼', '┤'))
+        print_horizontal_line(io, column_widths, ('╰', '─', '┴', '╯'))
+
+        return nothing
+    end
+
+    value_strings = [
+        sprint(
+            show_vector_pretty,
+            v.value,
+            context=IOContext(stdout, :limit=>true),
+            sizehint=0
+        ) for v in values(d)
+    ]
 
     symbol_width = max(length("Symbol"), maximum([length(string(k)) for k in keys(d)])) + 1
     name_width   = max(length("Name"), maximum([length(v.name) for v in values(d)]))
     label_width  = max(length("Label"), maximum([length(v.label) for v in values(d)]))
-    value_width  = max(
-        length("Value"),
-        min(20, maximum([length(string(v.value)) for v in values(d)])),
-    )
+    value_width  = max(length("Value"), maximum(length.(value_strings)))
     unit_width   = max(length("Unit"), maximum([length(string(v.unit)) for v in values(d)]))
+    column_widths = (symbol_width, name_width, label_width, value_width, unit_width)
 
-    print_horizontal_line(
-        io,
-        (symbol_width, name_width, label_width, value_width, unit_width),
-        ('╭', '─', '┬', '╮')
-    )
+    print_horizontal_line(io, column_widths, ('╭', '─', '┬', '╮'))
 
     printstyled(io, "│", rpad("Symbol", symbol_width, " "), " │"; bold=true)
     printstyled(io, rpad("Name", name_width, " "), " │"; bold=true)
     printstyled(io, rpad("Label", label_width, " "), " │"; bold=true)
     printstyled(io, rpad("Value", value_width, " "), " │"; bold=true)
     printstyled(io, rpad("Unit", unit_width, " "), " │"; bold=true)
-    println()
-   
-    print_parameter(
-        io,
-        d,
-        (symbol_width, name_width, label_width, value_width, unit_width),
-    )
-    println()
+    println(io)
 
-    print_horizontal_line(
-        io,
-        (symbol_width, name_width, label_width, value_width, unit_width),
-        ('╰', '─', '┴', '╯')
-    )
+    print_parameters(io, d, column_widths)
+    println(io)
+    print_horizontal_line(io, column_widths, ('╰', '─', '┴', '╯'))
 
 end
 
-function print_parameter(io::IO, d::Dict{Symbol, Parameter}, column_width::Tuple)
+function print_parameters(io::IO, d::Dict{Symbol, Parameter}, column_width::Tuple)
     print_horizontal_line(io, column_width, ('├', '─', '┼', '┤'))
     for (k, v) in d
+        value_string = sprint(
+            show_vector_pretty,
+            v.value,
+            context=IOContext(stdout, :limit=>true),
+            sizehint=0
+        )
+
         print(io, "│:", rpad(k, column_width[1]-1, " "), " │")
         print(io, rpad(v.name, column_width[2], " "), " │")
         print(io, rpad(v.label, column_width[3], " "), " │")
-        print(io, rpad(string(v.value), column_width[4], " "), " │")
+        print(io, rpad(value_string, column_width[4], " "), " │")
         print(io, rpad(string(v.unit), column_width[5], " "), " │")
     end
 
@@ -104,7 +116,22 @@ function print_horizontal_line(io::IO, column_width::Tuple, line_elements::Tuple
         print(io, line_elements[2]^(c+1), line_elements[3])
     end
     print(io, line_elements[2]^(column_width[end]+1), line_elements[4])
-    println()
+    println(io)
+
+    return nothing
+end
+
+function show_vector_pretty(io::IO, v, opn='[', cls=']')
+    limited = get(io, :limit, false)::Bool
+
+    if limited && length(v) > 10
+        f, l = first(v), last(v)
+        Base.show_delim_array(io, v, opn, ",", "", false, f, f+2)
+        print(io, "  …  ")
+        Base.show_delim_array(io, v, "", ",", cls, false, l-1, l)
+    else
+        Base.show_delim_array(io, v, opn, ",", cls, false)
+    end
 
     return nothing
 end

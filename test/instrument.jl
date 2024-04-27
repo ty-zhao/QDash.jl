@@ -13,9 +13,23 @@
     para1 = Parameter(;
         name  = "voltage",
         label = "Voltage",
-        value = 1:100,
+        value = collect(1:100),
         unit  = u"V",
     )
+
+    @test_throws "Unsupported property" instrument1.voltage
+
     addparameter!(instrument1, :voltage, para1)
     @test instrument1.voltage == para1
+
+    @test repr(
+        "text/plain",
+        instrument1.parameters,
+    ) == """Parameters
+      ╭─────────┬────────┬────────┬──────────────────────┬─────╮
+      │Symbol   │Name    │Label   │Value                 │Unit │
+      ├─────────┼────────┼────────┼──────────────────────┼─────┤
+      │:voltage │voltage │Voltage │[1, 2, 3  …  99, 100] │V    │
+      ╰─────────┴────────┴────────┴──────────────────────┴─────╯
+      """
 end
