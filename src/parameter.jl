@@ -49,7 +49,7 @@ function Base.show(io::IO, ::MIME"text/plain", p::AbstractParameter)
     fields = [:name, :label, :value, :unit]
     lmax =  maximum([length(string(f)) for f in fields])
     for f in fields
-        println(io, "  ", f, " "^(lmax-length(string(f))), ": ", getproperty(p, f))
+        println(io, "  ", rpad(f, lmax), ": ", getproperty(p, f))
     end
 
     return nothing
