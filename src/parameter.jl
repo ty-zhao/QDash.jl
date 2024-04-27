@@ -44,6 +44,7 @@ valuetype(::Parameter{T}) where {T} = T
 @forward Parameter{<:AbstractArray}.value Base.getindex, Base.iterate, Base.length
 @forward Parameter{<:AbstractVector}.value Base.append!, Base.push!
 
+Base.show(io::IO, p::AbstractParameter) = print(io, "Parameter: ", p.name)
 function Base.show(io::IO, ::MIME"text/plain", p::AbstractParameter)
     println(io, "Parameter")
     fields = [:name, :label, :value, :unit]
