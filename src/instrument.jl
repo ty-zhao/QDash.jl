@@ -85,14 +85,14 @@ function Base.show(io::IO, ::MIME"text/plain", d::Dict{Symbol, Parameter})
     println(io)
 
     print_parameters(io, d, column_widths)
-    println(io)
     print_horizontal_line(io, column_widths, ('╰', '─', '┴', '╯'))
 
 end
 
 function print_parameters(io::IO, d::Dict{Symbol, Parameter}, column_width::Tuple)
-    print_horizontal_line(io, column_width, ('├', '─', '┼', '┤'))
     for (k, v) in d
+        print_horizontal_line(io, column_width, ('├', '─', '┼', '┤'))
+
         value_string = sprint(
             show_vector_pretty,
             v.value,
@@ -105,6 +105,7 @@ function print_parameters(io::IO, d::Dict{Symbol, Parameter}, column_width::Tupl
         print(io, rpad(v.label, column_width[3], " "), " │")
         print(io, rpad(value_string, column_width[4], " "), " │")
         print(io, rpad(string(v.unit), column_width[5], " "), " │")
+        println(io)
     end
 
     return nothing
@@ -125,7 +126,7 @@ function show_vector_pretty(io::IO, v, opn='[', cls=']')
     limited = get(io, :limit, false)::Bool
 
     if limited && length(v) > 10
-        f, l = first(v), last(v)
+        f, l = 1, length(v)
         Base.show_delim_array(io, v, opn, ",", "", false, f, f+2)
         print(io, "  …  ")
         Base.show_delim_array(io, v, "", ",", cls, false, l-1, l)
