@@ -2,7 +2,6 @@ abstract type AbstractInstrument <: Qobject end
 
 mutable struct Instrument{model} <: AbstractInstrument
     name     :: String
-    address  :: String
     label    :: String
     ts       :: String
     metadata :: Dict{String, <:Any}
