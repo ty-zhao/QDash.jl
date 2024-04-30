@@ -2,6 +2,6 @@
 
 *A measurement control and data analysis platform.*
 
-```@docs
+<!-- ```@docs
 Parameter
-```
+``` -->
