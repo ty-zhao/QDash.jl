@@ -10,6 +10,7 @@
         "label" => "label",
         "ts"    => instrument1.ts,
     )
+    @test modelof(instrument1) == :dummy
 
     para1 = Parameter(;
         name  = "voltage",

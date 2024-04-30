@@ -7,7 +7,7 @@ using Unitful
 using UUIDs
 using YAXArrays
 
-export Parameter, valuetype, initialize_dataset, Instrument, addparameter!
+export Parameter, valuetype, initialize_dataset, Instrument, addparameter!, modelof
 
 include("qobject.jl")
 include("parameter.jl")

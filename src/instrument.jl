@@ -24,6 +24,8 @@ function Instrument(;
     return Instrument{model}(name, label, timestamp, metadata, parameters)
 end
 
+modelof(i::Instrument{T}) where T = T
+
 function Base.getproperty(i::AbstractInstrument, s::Symbol)
     direct_passthrough_fields = (:name, :label, :ts, :metadata, :parameters)
     if s in direct_passthrough_fields
@@ -32,6 +34,10 @@ function Base.getproperty(i::AbstractInstrument, s::Symbol)
 
     if s in keys(i.parameters)
         return i.parameters[s]
+    end
+
+    if s ≡ :model
+        return modelof(i)
     end
     
     error("Unsupported property: $s")
@@ -48,13 +54,13 @@ function addparameter!(i::AbstractInstrument, p::AbstractParameter)
 end
 
 function Base.show(io::IO, ::MIME"text/plain", d::Dict{Symbol, Parameter{<:Any}})
-    printstyled(io, "Parameters"; bold=true)
-    println(io)
+    indent = get(io, :indent, 0)
+    println(io, ' '^indent, "Parameters")
 
     if length(d) == 0
         column_widths = (4, 5, 4, 5)
         print_horizontal_line(io, column_widths, ('╭', '─', '┬', '╮'))
-        printstyled(io, "│Name │Label │Unit │Value │"; bold=true)
+        printstyled(io, ' '^indent, "│Name │Label │Unit │Value │"; bold=true)
         println(io)
         print_horizontal_line(io, column_widths, ('├', '─', '┼', '┤'))
         print_horizontal_line(io, column_widths, ('╰', '─', '┴', '╯'))
@@ -79,7 +85,7 @@ function Base.show(io::IO, ::MIME"text/plain", d::Dict{Symbol, Parameter{<:Any}}
 
     print_horizontal_line(io, column_widths, ('╭', '─', '┬', '╮'))
 
-    printstyled(io, "│", rpad("Name", name_width, " "), " │"; bold=true)
+    printstyled(io, ' '^indent, "│", rpad("Name", name_width, " "), " │"; bold=true)
     printstyled(io, rpad("Label", label_width, " "), " │"; bold=true)
     printstyled(io, rpad("Unit", unit_width, " "), " │"; bold=true)
     printstyled(io, rpad("Value", value_width, " "), " │"; bold=true)
@@ -92,6 +98,7 @@ function Base.show(io::IO, ::MIME"text/plain", d::Dict{Symbol, Parameter{<:Any}}
 end
 
 function print_parameters(io::IO, d::Dict{Symbol, Parameter}, column_width::Tuple)
+    indent = get(io, :indent, 0)
     for (k, v) in d
         print_horizontal_line(io, column_width, ('├', '─', '┼', '┤'))
 
@@ -102,7 +109,7 @@ function print_parameters(io::IO, d::Dict{Symbol, Parameter}, column_width::Tupl
             sizehint=0
         )
 
-        print(io, "│", rpad(v.name, column_width[1], " "), " │")
+        print(io, ' '^indent, "│", rpad(v.name, column_width[1], " "), " │")
         print(io, rpad(v.label, column_width[2], " "), " │")
         print(io, rpad(string(v.unit), column_width[3], " "), " │")
         print(io, rpad(value_string, column_width[4], " "), " │")
@@ -113,7 +120,8 @@ function print_parameters(io::IO, d::Dict{Symbol, Parameter}, column_width::Tupl
 end
 
 function print_horizontal_line(io::IO, column_width::Tuple, line_elements::Tuple)
-    print(io, line_elements[1])
+    indent = get(io, :indent, 0)
+    print(io, ' '^indent, line_elements[1])
     for c in column_width[1:end-1]
         print(io, line_elements[2]^(c+1), line_elements[3])
     end
@@ -138,6 +146,17 @@ function show_vector_pretty(io::IO, v, opn='[', cls=']')
     return nothing
 end
 
+function Base.show(io::IO, mime::MIME"text/plain", i::AbstractInstrument)
+    println(io, "Instrument")
+    fields = [:model, :name, :label, :parameters]
+    lmax =  maximum([length(string(f)) for f in fields])
+    for f in fields[1:end-1]
+        println(io, "  ", rpad(f, lmax), ": ", getproperty(i, f))
+    end
+    show(IOContext(io, :indent=>get(io, :indent, 0)+2), mime, i.parameters)
+
+    return nothing
+end
 # function Base.setproperty!(i::AbstractInstrument, s::Symbol, v)
 #     p.metadata[string(s)] = v
 #     ts = string(now())
