@@ -2,6 +2,7 @@ abstract type AbstractInstrument <: Qobject end
 
 mutable struct Instrument{model} <: AbstractInstrument
     name     :: String
+    address  :: String
     label    :: String
     ts       :: String
     metadata :: Dict{String, <:Any}
@@ -9,25 +10,28 @@ mutable struct Instrument{model} <: AbstractInstrument
 end
 
 function Instrument(;
-    model :: Symbol,
-    name  :: String,
-    label :: String = "label",
+    model   :: Symbol,
+    name    :: String,
+    address :: String,
+    label   :: String = "label",
     parameters :: Dict{Symbol, Parameter} = Dict{Symbol, Parameter}(),
 )
     timestamp = string(now())
     metadata = Dict(
-        "name"=>name,
-        "label"=>label,
-        "ts"=>timestamp
+        "model" => model,
+        "name"  => name,
+        "label" => label,
+        "ts"    => timestamp,
+        "address" => address,
     )
 
-    return Instrument{model}(name, label, timestamp, metadata, parameters)
+    return Instrument{model}(name, address, label, timestamp, metadata, parameters)
 end
 
 modelof(i::Instrument{T}) where T = T
 
 function Base.getproperty(i::AbstractInstrument, s::Symbol)
-    direct_passthrough_fields = (:name, :label, :ts, :metadata, :parameters)
+    direct_passthrough_fields = (:name, :label, :ts, :metadata, :parameters, :address)
     if s in direct_passthrough_fields
         return getfield(i, s)
     end
@@ -45,7 +49,7 @@ end
 
 function addparameter!(i::AbstractInstrument, p::AbstractParameter)
     if Symbol(p.name) in keys(i.parameters)
-        error("Parameter $name already exists in instrument")
+        error("Parameter $(p.name) already exists in instrument")
     end
 
     i.parameters[Symbol(p.name)] = p
@@ -60,8 +64,7 @@ function Base.show(io::IO, ::MIME"text/plain", d::Dict{Symbol, Parameter{<:Any}}
     if length(d) == 0
         column_widths = (4, 5, 4, 5)
         print_horizontal_line(io, column_widths, ('╭', '─', '┬', '╮'))
-        printstyled(io, ' '^indent, "│Name │Label │Unit │Value │"; bold=true)
-        println(io)
+        println(io, ' '^indent, "│Name │Label │Unit │Value │")
         print_horizontal_line(io, column_widths, ('├', '─', '┼', '┤'))
         print_horizontal_line(io, column_widths, ('╰', '─', '┴', '╯'))
 
@@ -148,11 +151,12 @@ end
 
 function Base.show(io::IO, mime::MIME"text/plain", i::AbstractInstrument)
     println(io, "Instrument")
-    fields = [:model, :name, :label, :parameters]
+    fields = [:model, :name,  :address, :label]
     lmax =  maximum([length(string(f)) for f in fields])
-    for f in fields[1:end-1]
+    for f in fields
         println(io, "  ", rpad(f, lmax), ": ", getproperty(i, f))
     end
+    println(io, "  ", '─'^length("Parameters"))
     show(IOContext(io, :indent=>get(io, :indent, 0)+2), mime, i.parameters)
 
     return nothing
