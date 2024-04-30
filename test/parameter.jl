@@ -5,13 +5,17 @@
         value = 0.0,
         unit  = u"V",
     )
-    @test repr("text/plain", para1) == """
-                                    Parameter
-                                      name : voltage
-                                      label: Voltage
-                                      value: 0.0
-                                      unit : V
-                                    """
+    @test repr(para1) == "Parameter: voltage"
+    @test repr(
+        "text/plain",
+        para1
+    ) == """
+      Parameter
+        name : voltage
+        label: Voltage
+        value: 0.0
+        unit : V
+      """
     @test para1.metadata == Dict(
         "name"  => "voltage",
         "label" => "Voltage",
