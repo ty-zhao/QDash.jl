@@ -1,5 +1,6 @@
 @testset "instrument test" begin
     instrument1 = Instrument(;
+        model = :dummy,
         name  = "instrument",
         label = "label",
     )

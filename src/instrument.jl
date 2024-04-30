@@ -1,5 +1,8 @@
-mutable struct Instrument <: AbstractInstrument
+abstract type AbstractInstrument <: Qobject end
+
+mutable struct Instrument{model} <: AbstractInstrument
     name     :: String
+    address  :: String
     label    :: String
     ts       :: String
     metadata :: Dict{String, <:Any}
@@ -7,8 +10,10 @@ mutable struct Instrument <: AbstractInstrument
 end
 
 function Instrument(;
-    name  :: String = "instrument",
+    model :: Symbol,
+    name  :: String,
     label :: String = "label",
+    parameters :: Dict{Symbol, Parameter} = Dict{Symbol, Parameter}(),
 )
     timestamp = string(now())
     metadata = Dict(
@@ -17,8 +22,7 @@ function Instrument(;
         "ts"=>timestamp
     )
 
-    parameters = Dict{Symbol, Parameter}()
-    return Instrument(name, label, timestamp, metadata, parameters)
+    return Instrument{model}(name, label, timestamp, metadata, parameters)
 end
 
 function Base.getproperty(i::AbstractInstrument, s::Symbol)
@@ -44,7 +48,7 @@ function addparameter!(i::AbstractInstrument, p::AbstractParameter)
     return nothing
 end
 
-function Base.show(io::IO, ::MIME"text/plain", d::Dict{Symbol, Parameter})
+function Base.show(io::IO, ::MIME"text/plain", d::Dict{Symbol, Parameter{<:Any}})
     printstyled(io, "Parameters"; bold=true)
     println(io)
 
