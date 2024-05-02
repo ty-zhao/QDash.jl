@@ -28,7 +28,7 @@ function Instrument(;
     return Instrument{model}(name, address, label, timestamp, metadata, parameters)
 end
 
-modelof(i::Instrument{T}) where T = T
+modelof(::Instrument{T}) where T = T
 
 function Base.getproperty(i::AbstractInstrument, s::Symbol)
     direct_passthrough_fields = (:name, :label, :ts, :metadata, :parameters, :address)

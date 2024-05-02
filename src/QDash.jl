@@ -13,5 +13,6 @@ include("qobject.jl")
 include("parameter.jl")
 include("dataset.jl")
 include("instrument.jl")
+include("visa/VISA.jl")
 
 end
