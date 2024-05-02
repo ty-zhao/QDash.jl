@@ -5,6 +5,9 @@ mutable struct Instrument{model} <: AbstractInstrument
     address  :: String
     label    :: String
     ts       :: String
+    handle   :: Any
+    initialized :: Bool
+    bufSize  :: UInt32
     metadata :: Dict{String, <:Any}
     parameters :: Dict{Symbol, <:AbstractParameter}
 end
@@ -25,13 +28,33 @@ function Instrument(;
         "address" => address,
     )
 
-    return Instrument{model}(name, address, label, timestamp, metadata, parameters)
+    return Instrument{model}(
+        name,
+        address,
+        label,
+        timestamp,
+        0,
+        false,
+        UInt32(1024),
+        metadata,
+        parameters,
+    )
 end
 
 modelof(::Instrument{T}) where T = T
 
 function Base.getproperty(i::AbstractInstrument, s::Symbol)
-    direct_passthrough_fields = (:name, :label, :ts, :metadata, :parameters, :address)
+    direct_passthrough_fields = (
+        :name,
+        :address,
+        :label,
+        :ts,
+        :handle,
+        :initialized,
+        :bufSize,
+        :metadata,
+        :parameters,
+    )
     if s in direct_passthrough_fields
         return getfield(i, s)
     end

@@ -204,12 +204,12 @@ read(obj::T) where {T<:Instrument} = rstrip(viRead(obj.handle; bufSize=obj.bufSi
 
 readavailable(obj::T) where {T<:Instrument} = readavailable(obj.handle) 
 
-# connect,disconnect, query
+# connect, disconnect, query
 function connect!(sesn, obj, mode=VI_NO_LOCK, timeout=VI_TMO_IMMEDIATE)
     if !obj.initialized
         #Pointer for the instrument handle
         vi = ViPSession(0)
-        check_status(viOpen(sesn, obj.address, mode, timeout, vi))
+        @check_status viOpen(sesn, obj.address, mode, timeout, vi)
         obj.handle = vi.x
         obj.initialized = true
     end
