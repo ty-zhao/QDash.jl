@@ -200,7 +200,10 @@ end
 
 write(obj::T, msg::AbstractString) where {T<:Instrument} = viWrite(obj.handle, msg) 
 
-read(obj::T) where {T<:Instrument} = rstrip(viRead(obj.handle; bufSize=obj.bufSize), ['\r', '\n']) 
+read(obj::T) where {T<:Instrument} = rstrip(
+	viRead(obj.handle; bufSize=obj.bufSize),
+	['\r', '\n'],
+) 
 
 readavailable(obj::T) where {T<:Instrument} = readavailable(obj.handle) 
 
@@ -213,6 +216,8 @@ function connect!(sesn, obj, mode=VI_NO_LOCK, timeout=VI_TMO_IMMEDIATE)
         obj.handle = vi.x
         obj.initialized = true
     end
+
+	return nothing
 end
 
 function disconnect!(obj::T) where {T<:Instrument}
@@ -220,10 +225,13 @@ function disconnect!(obj::T) where {T<:Instrument}
         viClose(obj.handle)
         obj.initialized = false
     end
+
+	return nothing
 end
 
 function query(obj::T, msg::AbstractString; delay::Real=0) where {T<:Instrument}
     write(obj, msg)
     sleep(delay)
-    read(obj)
+
+    return read(obj)
 end

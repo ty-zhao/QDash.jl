@@ -75,6 +75,7 @@ function addparameter!(i::AbstractInstrument, p::AbstractParameter)
         error("Parameter $(p.name) already exists in instrument")
     end
 
+    p.instrument = modelof(i)
     i.parameters[Symbol(p.name)] = p
 
     return nothing

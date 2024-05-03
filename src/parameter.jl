@@ -1,10 +1,11 @@
 abstract type AbstractParameter <: Qobject end
 
-mutable struct Parameter{T} <: AbstractParameter
+mutable struct Parameter{T, I} <: AbstractParameter
     name     :: String
     label    :: String
     value    :: T
     unit     :: Unitful.Units
+    instrument :: Symbol
     ts       :: String
     metadata :: Dict{String, <:Any}
 end
@@ -13,7 +14,8 @@ function Parameter(;
     name  :: String = "parameter",
     label :: String = "label",
     value :: T = T[],
-    unit  :: Unitful.Units = Unitful.NoUnits
+    unit  :: Unitful.Units = Unitful.NoUnits,
+    instrument :: Symbol = :none
 ) where {T}
     timestamp = string(now())
     metadata = Dict(
@@ -24,7 +26,15 @@ function Parameter(;
         "ts"=>timestamp
     )
 
-    return Parameter{T}(name, label, value, unit, timestamp, metadata)
+    return Parameter{T, instrument}(
+        name,
+        label,
+        value,
+        unit,
+        instrument,
+        timestamp,
+        metadata,
+    )
 end
 
 function Base.setproperty!(p::AbstractParameter, s::Symbol, v)
