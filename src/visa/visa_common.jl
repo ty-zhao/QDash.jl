@@ -683,5 +683,3 @@ const VI_ERROR_FAIL_ID_QUERY = VI_ERROR + Int32(0x3ffc0011)
 const VI_ERROR_INV_RESPONSE = VI_ERROR + Int32(0x3ffc0012)
 const VI_ON = 1
 const VI_OFF = 0
-
-

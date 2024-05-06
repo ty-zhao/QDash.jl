@@ -100,7 +100,7 @@ function Base.getproperty(i::AbstractInstrument, s::Symbol)
     if s ≡ :model
         return modelof(i)
     end
-    
+
     error("Unsupported property: $s")
 end
 

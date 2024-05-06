@@ -49,7 +49,7 @@ function viFindRsrc(sesn::ViSession, expr::AbstractString)
             findList.x, descp,
         )
         push!(instrStrs, unsafe_string(descp))
-        
+
     end
 
     return instrStrs
@@ -194,18 +194,18 @@ function readavailable(instrHandle::ViSession)
             break
         end
     end
-    
+
     return take!(ret)
 end
 
-write(obj::T, msg::AbstractString) where {T<:AbstractInstrument} = viWrite(obj.handle, msg) 
+write(obj::T, msg::AbstractString) where {T<:AbstractInstrument} = viWrite(obj.handle, msg)
 
 read(obj::T) where {T<:AbstractInstrument} = rstrip(
 	viRead(obj.handle; bufSize=obj.bufSize),
 	['\r', '\n'],
-) 
+)
 
-readavailable(obj::T) where {T<:AbstractInstrument} = readavailable(obj.handle) 
+readavailable(obj::T) where {T<:AbstractInstrument} = readavailable(obj.handle)
 
 # connect, disconnect, query
 function connect!(sesn, obj, mode=VI_NO_LOCK, timeout=VI_TMO_IMMEDIATE)
