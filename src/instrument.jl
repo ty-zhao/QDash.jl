@@ -1,5 +1,3 @@
-abstract type AbstractInstrument <: Qobject end
-
 mutable struct Instrument{model} <: AbstractInstrument
     name     :: String
     address  :: String
@@ -12,7 +10,8 @@ mutable struct Instrument{model} <: AbstractInstrument
     parameters :: Dict{Symbol, <:AbstractParameter}
 end
 
-function Instrument(;
+function Instrument(
+    :: Val{:sim};
     model   :: Symbol,
     name    :: String,
     address :: String,
@@ -35,6 +34,41 @@ function Instrument(;
         timestamp,
         0,
         false,
+        UInt32(1024),
+        metadata,
+        parameters,
+    )
+end
+
+function Instrument(
+    :: Val{:VISA};
+    model   :: Symbol,
+    name    :: String,
+    address :: String,
+    label   :: String = "label",
+    parameters :: Dict{Symbol, Parameter} = Dict{Symbol, Parameter}(),
+)
+    timestamp = string(now())
+    metadata = Dict(
+        "model" => model,
+        "name"  => name,
+        "label" => label,
+        "ts"    => timestamp,
+        "address" => address,
+    )
+
+    resmgr = viOpenDefaultRM()
+
+    vi = ViPSession(0)
+    @check_status viOpen(resmgr, address, VI_NO_LOCK, VI_TMO_IMMEDIATE, vi)
+
+    return Instrument{model}(
+        name,
+        address,
+        label,
+        timestamp,
+        vi.x,
+        true,
         UInt32(1024),
         metadata,
         parameters,

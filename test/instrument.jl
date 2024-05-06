@@ -1,5 +1,6 @@
 @testset "instrument test" begin
-    instrument1 = Instrument(;
+    instrument1 = Instrument(
+        Val(:sim);
         model = :dummy,
         name  = "instrument",
         address = "192.168.0.0",
