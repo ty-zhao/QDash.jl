@@ -18,13 +18,20 @@ include("dataset.jl")
     using Dates: now
     using ..QDash: Qobject, Parameter, AbstractParameter
 
-    export Instrument, modelof, addparameter!
+    export Instrument, modelof, addparameter!,
+           query
 
+    abstract type AbstractInstrument <: Qobject end
+
+    include("visa/VISA.jl")
     include("instrument.jl")
 end
 
-# using .Instruments
-include("visa/VISA.jl")
-include("drivers/drivers.jl")
+module Drivers
+    using ..Instruments
+    using ..QDash: Parameter
+    using Unitful
 
+    include("drivers/drivers.jl")
+end
 end
