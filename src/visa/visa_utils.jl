@@ -198,40 +198,40 @@ function readavailable(instrHandle::ViSession)
     return take!(ret)
 end
 
-write(obj::T, msg::AbstractString) where {T<:Instrument} = viWrite(obj.handle, msg) 
+# write(obj::T, msg::AbstractString) where {T<:Instrument} = viWrite(obj.handle, msg) 
 
-read(obj::T) where {T<:Instrument} = rstrip(
-	viRead(obj.handle; bufSize=obj.bufSize),
-	['\r', '\n'],
-) 
+# read(obj::T) where {T<:Instrument} = rstrip(
+# 	viRead(obj.handle; bufSize=obj.bufSize),
+# 	['\r', '\n'],
+# ) 
 
-readavailable(obj::T) where {T<:Instrument} = readavailable(obj.handle) 
+# readavailable(obj::T) where {T<:Instrument} = readavailable(obj.handle) 
 
-# connect, disconnect, query
-function connect!(sesn, obj, mode=VI_NO_LOCK, timeout=VI_TMO_IMMEDIATE)
-    if !obj.initialized
-        #Pointer for the instrument handle
-        vi = ViPSession(0)
-        @check_status viOpen(sesn, obj.address, mode, timeout, vi)
-        obj.handle = vi.x
-        obj.initialized = true
-    end
+# # connect, disconnect, query
+# function connect!(sesn, obj, mode=VI_NO_LOCK, timeout=VI_TMO_IMMEDIATE)
+#     if !obj.initialized
+#         #Pointer for the instrument handle
+#         vi = ViPSession(0)
+#         @check_status viOpen(sesn, obj.address, mode, timeout, vi)
+#         obj.handle = vi.x
+#         obj.initialized = true
+#     end
 
-	return nothing
-end
+# 	return nothing
+# end
 
-function disconnect!(obj::T) where {T<:Instrument}
-    if obj.initialized
-        viClose(obj.handle)
-        obj.initialized = false
-    end
+# function disconnect!(obj::T) where {T<:Instrument}
+#     if obj.initialized
+#         viClose(obj.handle)
+#         obj.initialized = false
+#     end
 
-	return nothing
-end
+# 	return nothing
+# end
 
-function query(obj::T, msg::AbstractString; delay::Real=0) where {T<:Instrument}
-    write(obj, msg)
-    sleep(delay)
+# function query(obj::T, msg::AbstractString; delay::Real=0) where {T<:Instrument}
+#     write(obj, msg)
+#     sleep(delay)
 
-    return read(obj)
-end
+#     return read(obj)
+# end
