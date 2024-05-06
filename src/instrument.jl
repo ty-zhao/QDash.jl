@@ -163,12 +163,16 @@ function print_parameters(io::IO, d::Dict{Symbol, Parameter}, column_width::Tupl
     for (k, v) in d
         print_horizontal_line(io, column_width, ('├', '─', '┼', '┤'))
 
-        value_string = sprint(
-            show_vector_pretty,
-            v.value,
-            context=IOContext(stdout, :limit=>true),
-            sizehint=0
-        )
+        if v.value isa AbstractVector
+            value_string = sprint(
+                show_vector_pretty,
+                v.value,
+                context=IOContext(stdout, :limit=>true),
+                sizehint=0
+            )
+        else
+            value_string = string(v.value)
+        end
 
         print(io, ' '^indent, "│", rpad(v.name, column_width[1], " "), " │")
         print(io, rpad(v.label, column_width[2], " "), " │")
