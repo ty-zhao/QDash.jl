@@ -10,12 +10,34 @@ mutable struct Instrument{model} <: AbstractInstrument
     parameters :: Dict{Symbol, <:AbstractParameter}
 end
 
+"""
+    Instrument(Val(:sim); kwargs...)
+    Instrument(Val(:VISA); kwargs...)
+
+The main interface to define and interact with instruments.
+
+# Arguments
+- `::Val(:sim)`: Indicates a simulated instrument.
+- `::Val(:VISA)`: Indicates a VISA instrument.
+
+# Keywords
+- `model::Symbol`
+- `name::String`
+- `address::String`
+- `label::String`
+- `parameters::Dict{Symbol, Parameter} = Dict{Symbol, Parameter}()`
+
+# Returns
+- `Instrument{model}`
+"""
+function Instrument end
+
 function Instrument(
     :: Val{:sim};
     model   :: Symbol,
     name    :: String,
     address :: String,
-    label   :: String = "label",
+    label   :: String,
     parameters :: Dict{Symbol, Parameter} = Dict{Symbol, Parameter}(),
 )
     timestamp = string(now())
