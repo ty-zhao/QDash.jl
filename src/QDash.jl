@@ -19,7 +19,7 @@ include("dataset.jl")
     using ..QDash: Qobject, Parameter, AbstractParameter
 
     export Instrument, modelof, addparameter!,
-           query
+           query, @scpifloat
 
     abstract type AbstractInstrument <: Qobject end
 

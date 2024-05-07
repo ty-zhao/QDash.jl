@@ -4,13 +4,13 @@ function AgilentN5183M(;
     label   :: String = "label",
 )
     parameters = Dict{Symbol, Parameter}()
-    parameters[:frequency] = Parameter(;
-        name="frequency",
-        label="Frequency",
-        value=0.0,
-        unit=u"Hz",
-        instrument=:AgilentN5183M,
-    )
+    # parameters[:frequency] = Parameter(;
+    #     name="frequency",
+    #     label="Frequency",
+    #     value=0.0,
+    #     unit=u"Hz",
+    #     instrument=:AgilentN5183M,
+    # )
 
     return Instrument(
         Val(:VISA);
@@ -21,3 +21,5 @@ function AgilentN5183M(;
         parameters=parameters,
     )
 end
+
+@scpifloat(frequency, Instrument{:AgilentN5183M}, "SOUR:FREQ", 1, "Hz")
