@@ -8,7 +8,7 @@ mutable struct Parameter{T, I} <: AbstractParameter
     label    :: String
     value    :: T
     unit     :: Unitful.Units
-    instrument :: AbstractInstrument
+    instrument :: Union{AbstractInstrument, Nothing}
     ts       :: String
     metadata :: Dict{String, <:Any}
 end

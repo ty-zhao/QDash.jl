@@ -3,7 +3,7 @@ function Parameter(;
     label :: String = "label",
     value :: T = T[],
     unit  :: Unitful.Units = Unitful.NoUnits,
-    instrument :: Symbol = :none
+    instrument :: Union{Instrument, Nothing} = nothing
 ) where {T}
     timestamp = string(now())
     metadata = Dict(

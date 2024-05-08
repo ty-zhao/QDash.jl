@@ -5,8 +5,8 @@
 The main interface to define and interact with instruments.
 
 # Arguments
-- `::Val(:sim)`: Indicates a simulated instrument.
-- `::Val(:VISA)`: Indicates a VISA instrument.
+- `Val(:sim)`: Indicates a simulated instrument.
+- `Val(:VISA)`: Indicates a VISA instrument.
 
 # Keywords
 - `model::Symbol`
@@ -114,12 +114,12 @@ function Base.getproperty(i::AbstractInstrument, s::Symbol)
     error("Unsupported property: $s")
 end
 
-function addparameter!(i::AbstractInstrument, p::AbstractParameter)
+function addparameter!(i::Union{Instrument, Nothing}, p::AbstractParameter)
     if Symbol(p.name) in keys(i.parameters)
         error("Parameter $(p.name) already exists in instrument")
     end
 
-    p.instrument = modelof(i)
+    p.instrument = i
     i.parameters[Symbol(p.name)] = p
 
     return nothing
