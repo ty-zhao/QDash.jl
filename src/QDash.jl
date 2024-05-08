@@ -8,28 +8,19 @@ using Unitful
 using UUIDs
 using YAXArrays
 
-export Parameter, valuetype, initialize_dataset
+export Parameter, valuetype, initialize_dataset,
+       Instrument, modelof, addparameter!,
+       query, @scpifloat
 
+include("typedefs.jl")
 include("qobject.jl")
 include("parameter.jl")
 include("dataset.jl")
-
-@reexport module Instruments
-    using Dates: now
-    using ..QDash: Qobject, Parameter, AbstractParameter
-
-    export Instrument, modelof, addparameter!,
-           query, @scpifloat
-
-    abstract type AbstractInstrument <: Qobject end
-
-    include("visa/VISA.jl")
-    include("instrument.jl")
-end
+include("visa/VISA.jl")
+include("instrument.jl")
 
 module Drivers
-    using ..Instruments
-    using ..QDash: Parameter
+    using ..QDash
     using Unitful
 
     include("drivers/drivers.jl")

@@ -1,15 +1,3 @@
-abstract type AbstractParameter <: Qobject end
-
-mutable struct Parameter{T, I} <: AbstractParameter
-    name     :: String
-    label    :: String
-    value    :: T
-    unit     :: Unitful.Units
-    instrument :: Symbol
-    ts       :: String
-    metadata :: Dict{String, <:Any}
-end
-
 function Parameter(;
     name  :: String = "parameter",
     label :: String = "label",

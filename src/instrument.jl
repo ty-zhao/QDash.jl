@@ -1,15 +1,3 @@
-mutable struct Instrument{model} <: AbstractInstrument
-    name     :: String
-    address  :: String
-    label    :: String
-    ts       :: String
-    handle   :: Any
-    initialized :: Bool
-    bufSize  :: UInt32
-    metadata :: Dict{String, <:Any}
-    parameters :: Dict{Symbol, <:AbstractParameter}
-end
-
 """
     Instrument(Val(:sim); kwargs...)
     Instrument(Val(:VISA); kwargs...)

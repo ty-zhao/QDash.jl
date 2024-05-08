@@ -198,14 +198,14 @@ function readavailable(instrHandle::ViSession)
     return take!(ret)
 end
 
-write(obj::T, msg::AbstractString) where {T<:AbstractInstrument} = viWrite(obj.handle, msg)
+write(obj::T, msg::AbstractString) where {T<:Instrument} = viWrite(obj.handle, msg)
 
-read(obj::T) where {T<:AbstractInstrument} = rstrip(
+read(obj::T) where {T<:Instrument} = rstrip(
 	viRead(obj.handle; bufSize=obj.bufSize),
 	['\r', '\n'],
 )
 
-readavailable(obj::T) where {T<:AbstractInstrument} = readavailable(obj.handle)
+readavailable(obj::T) where {T<:Instrument} = readavailable(obj.handle)
 
 # connect, disconnect, query
 function connect!(sesn, obj, mode=VI_NO_LOCK, timeout=VI_TMO_IMMEDIATE)
@@ -220,7 +220,7 @@ function connect!(sesn, obj, mode=VI_NO_LOCK, timeout=VI_TMO_IMMEDIATE)
 	return nothing
 end
 
-function disconnect!(obj::T) where {T<:AbstractInstrument}
+function disconnect!(obj::T) where {T<:Instrument}
     if obj.initialized
         viClose(obj.handle)
         obj.initialized = false
@@ -229,7 +229,7 @@ function disconnect!(obj::T) where {T<:AbstractInstrument}
 	return nothing
 end
 
-function query(obj::T, msg::AbstractString; delay::Real=0) where {T<:AbstractInstrument}
+function query(obj::T, msg::AbstractString; delay::Real=0) where {T<:Instrument}
     write(obj, msg)
     sleep(delay)
 
