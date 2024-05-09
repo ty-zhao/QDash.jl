@@ -94,7 +94,7 @@ function viEnableEvent(
     mechanism::Integer,
 )
     @check_status ccall(
-        (:viEnableEvent,libvisa),
+        (:viEnableEvent, libvisa),
         ViStatus,
         (ViSession, ViEventType, UInt16, ViEventFilter),
         instrHandle, eventType, mechanism, 0,
@@ -109,7 +109,7 @@ function viDisableEvent(
     mechanism::Integer,
 )
     @check_status ccall(
-        (:viEnableEvent,libvisa),
+        (:viEnableEvent, libvisa),
         ViStatus,
         (ViSession, ViEventType, UInt16),
         instrHandle, eventType, mechanism,
@@ -124,7 +124,7 @@ function viDiscardEvents(
     mechanism::UInt16,
 )
     @check_status ccall(
-        (:viEnableEvent,libvisa),
+        (:viEnableEvent, libvisa),
         ViStatus,
         (ViSession, ViEventType, UInt16),
         instrHandle, eventType, mechanism,
@@ -141,7 +141,7 @@ function viWaitOnEvent(
     outType = Array(ViEventType)
     outEvent = Array(ViEvent)
     @check_status ccall(
-        (:viWaitOnEvent,libvisa),
+        (:viWaitOnEvent, libvisa),
         ViStatus,
         (ViSession, ViEventType, UInt32, Ptr{ViEventType}, Ptr{ViEvent}),
         instrHandle, eventType, timeout, outType, outEvent,
@@ -186,7 +186,7 @@ end
 
 function readavailable(instrHandle::ViSession)
     ret = IOBuffer()
-    buf = Array(UInt8, 0x400)
+    buf = Array{UInt8}(undef, 400)
     while true
         (done, bytesRead) = viRead!(instrHandle, buf)
         write(ret,buf[1:bytesRead])
