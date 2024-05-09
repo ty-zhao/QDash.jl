@@ -1,6 +1,6 @@
 """
-    Instrument(Val(:sim); kwargs...)
-    Instrument(Val(:VISA); kwargs...)
+    Instrument(Val(:sim); kwargs...) -> Instrument{model}
+    Instrument(Val(:VISA); kwargs...) -> Instrument{model}
 
 The main interface to define and interact with instruments.
 
@@ -14,9 +14,6 @@ The main interface to define and interact with instruments.
 - `address::String`
 - `label::String`
 - `parameters::Dict{Symbol, Parameter} = Dict{Symbol, Parameter}()`
-
-# Returns
-- `Instrument{model}`
 """
 function Instrument end
 
