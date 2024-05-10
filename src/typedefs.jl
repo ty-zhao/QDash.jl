@@ -3,7 +3,7 @@ abstract type Qobject end
 abstract type AbstractParameter <: Qobject end
 abstract type AbstractInstrument <: Qobject end
 
-mutable struct Parameter{T, I} <: AbstractParameter
+mutable struct Parameter{T} <: AbstractParameter
     name     :: String
     label    :: String
     value    :: T

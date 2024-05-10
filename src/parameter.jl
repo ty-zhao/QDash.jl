@@ -14,7 +14,7 @@ function Parameter(;
         "ts"=>timestamp
     )
 
-    return Parameter{T, instrument}(
+    return Parameter{T}(
         name,
         label,
         value,
