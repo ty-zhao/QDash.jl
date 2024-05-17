@@ -10,7 +10,7 @@ using YAXArrays
 
 export Parameter, valuetype, initialize_dataset,
        Instrument, modelof, addparameter!,
-       query, @scpifloat
+       query, @scpifloat, write
 
 include("typedefs.jl")
 include("qobject.jl")

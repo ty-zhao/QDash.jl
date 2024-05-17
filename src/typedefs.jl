@@ -7,8 +7,10 @@ mutable struct Parameter{T} <: AbstractParameter
     name     :: String
     label    :: String
     value    :: T
-    unit     :: Unitful.Units
+    unit     :: Union{Unitful.Units, Unitful.MixedUnits}
     instrument :: Union{AbstractInstrument, Nothing}
+    get      :: Union{Nothing, String, Function}
+    set      :: Union{Nothing, String, Function}
     ts       :: String
     metadata :: Dict{String, <:Any}
 end

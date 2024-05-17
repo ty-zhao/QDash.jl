@@ -136,6 +136,13 @@ function Base.show(io::IO, ::MIME"text/plain", d::Dict{Symbol, Parameter{<:Any}}
         return nothing
     end
 
+    [
+        println(
+            v.name,
+            v.value,
+        ) for v in values(d)
+    ]
+
     value_strings = [
         sprint(
             show_vector_pretty,
@@ -231,17 +238,17 @@ function Base.show(io::IO, mime::MIME"text/plain", i::AbstractInstrument)
     return nothing
 end
 
-macro scpifloat(name, instrType, scpiStr, scale, units)
-	setterFunc = Symbol(string(name)*"!")
-	setterProto = :($(setterFunc)(instr::$instrType, val::Real))
-	setterBody = :(write(instr, $scpiStr * " $val"))
-	setter = Expr(:function, esc(setterProto), esc(setterBody))
-	getCmd = scpiStr*"?"
-	getterProto = :($name(instr::$instrType))
-	getterBody = :(parse(Float64, query(instr, $getCmd)))
-	getter = Expr(:function, esc(getterProto), esc(getterBody))
-	Expr(:block, setter, getter)
-end
+# macro scpifloat(name, instrType, scpiStr, scale, units)
+# 	setterFunc = Symbol(string(name)*"!")
+# 	setterProto = :($(setterFunc)(instr::$instrType, val::Real))
+# 	setterBody = :(QDash.write(instr, $scpiStr * " $val"))
+# 	setter = Expr(:function, esc(setterProto), esc(setterBody))
+# 	getCmd = scpiStr*"?"
+# 	getterProto = :($name(instr::$instrType))
+# 	getterBody = :(parse(Float64, query(instr, $getCmd)))
+# 	getter = Expr(:function, esc(getterProto), esc(getterBody))
+# 	Expr(:block, setter, getter)
+# end
 # function Base.setproperty!(i::AbstractInstrument, s::Symbol, v)
 #     p.metadata[string(s)] = v
 #     ts = string(now())

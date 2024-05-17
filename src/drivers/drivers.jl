@@ -18,33 +18,21 @@ function AgilentN5183M(;
             label="Frequency",
             value=0.0,
             unit=u"Hz",
-        )
-    )
-
-    addparameter!(
-        instr,
-        Parameter(
-            name="power",
-            label="Power",
-            value=0.0,
-            unit=u"dBm",
+            get="SOUR:FREQ?",
+            set="SOUR:FREQ ",
         )
     )
 
     return instr
 end
 
-macro scpifloat(name, instrType, scpiStr, scale, units)
-	setterFunc = Symbol(string(name)*"!")
-	setterProto = :($(setterFunc)(instr::$instrType, val::Real))
-	setterBody = :(write(instr, $scpiStr * " $val"))
-	setter = Expr(:function, esc(setterProto), esc(setterBody))
-	getCmd = scpiStr*"?"
-	getterProto = :($name(instr::$instrType))
-	getterBody = :(parse(Float64, query(instr, $getCmd)))
-	getter = Expr(:function, esc(getterProto), esc(getterBody))
-	Expr(:block, setter, getter)
+
+function setvalue(i::Instrument{:AgilentN5183M}, p::Parameter, v)
+    write(i, p.set*"$v")
+
+    return nothing
 end
 
-@scpifloat(frequency, Instrument{:AgilentN5183M}, "SOUR:FREQ", 1, "Hz")
-@scpifloat(power, Instrument{:AgilentN5183M}, "SOUR:POW", 1, "dBm")
+function getvalue(i::Instrument{:AgilentN5183M}, p::Parameter)
+    return query(i, p.get)
+end
